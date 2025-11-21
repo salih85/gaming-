@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> Run Road</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<style>
+     * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: antiquewhite;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .road {
+      height: 99vh;
+      background-image: url("./image/e5178ef6-f94e-4cd9-9f0c-625eedddb525.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      border: 2px solid black;
+      position: relative;
+    }
+
+    .row {
+      display: flex;
+      padding-left: 5%;
+      padding-right: 5%;
+    }
+
+    .col-4 {
+      width: 33.33%;
+    }
+
+    .obstacle {
+      position: absolute;
+      width: clamp(60px, 12vw, 140px);
+      bottom: 5%;
+      left: 46%;
+      transition: left 0.2s ease;
+      z-index: 10;
+    }
+
+    .obs {
+      background-image: url(./image/download-removebg-preview.png);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      height: clamp(50px, 8vw, 90px);
+      width: clamp(80px, 14vw, 180px);
+      position: absolute;
+      top: 0%;
+      display: none;
+      z-index: 9;
+    }
+
+    #obs1 {
+      left: 13%;
+    }
+
+    #obs2 {
+      left: 43%;
+    }
+
+    #obs3 {
+      left: 73%;
+    }
+
+    #startScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    #startScreen h1 {
+      font-size: clamp(28px, 6vw, 48px);
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    #startScreen button {
+      padding: 12px 24px;
+      font-size: clamp(16px, 3vw, 20px);
+      background: #ffcc00;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #startScreen button:hover {
+      background: #ffaa00;
+    }
+
+    #gameOverOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    #gameOverText {
+      color: #fff;
+      font-size: clamp(28px, 6vw, 48px);
+      text-align: center;
+    }
+
+    #gameOverText button {
+      margin-top: 16px;
+      font-size: clamp(14px, 3vw, 18px);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #ff4444;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #gameOverText button:hover {
+      background: #cc0000;
+    }
+
+    #scoreBoard,
+    #highScoreBoard {
+      position: fixed;
+      left: 5%;
+      font-size: clamp(14px, 3vw, 24px);
+      font-weight: bold;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 8px 15px;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+
+    #scoreBoard {
+      top: 80px;
+    }
+
+    #highScoreBoard {
+      top: 60px;
+    }
+
+    .controls {
+      display: none;
+      position: fixed;
+      bottom: 5%;
+      left: 0;
+      right: 0;
+      justify-content: center;
+      gap: 40px;
+      z-index: 1000;
+    }
+
+    .controls button {
+      padding: 15px 25px;
+      font-size: 20px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .controls button:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    @media (max-width: 768px) {
+      .controls {
+        display: flex;
+      }
+    }
+</style>
+
+<body>
+
+        <%- include('../partials/navbar') %>
+    
+  <div id="scoreBoard">Score: 0</div>
+
+  <div id="startScreen">
+    <div>
+      <h1>Subway Surfers</h1>
+      <button onclick="startGame()">Start Game</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="game">
+      <div class="row">
+        <div class="col-4 road" id="r1"></div>
+        <div class="col-4 road" id="r2"></div>
+        <div class="col-4 road" id="r3"></div>
+      </div>
+      <img src="./image/5Mbps-unscreen.gif" id="player" class="obstacle" />
+      <div id="obs1" class="obs"></div>
+      <div id="obs2" class="obs"></div>
+      <div id="obs3" class="obs"></div>
+    </div>
+  </div>
+
+  <div id="gameOverOverlay">
+    <div id="gameOverText">Game Over<br>
+      <button onclick="location.reload()">Restart</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="moveLeft()">⬅️</button>
+    <button onclick="moveRight()">➡️</button>
+  </div>
+  </div>
+  </div>
+  <script>
+     const roads = [
+  { name: 'r1', left: 15 },
+  { name: 'r2', left: 45 },
+  { name: 'r3', left: 75 }
+];
+
+let currentPlayer = 0;
+const player = document.getElementById('player');
+player.style.left = roads[currentPlayer].left + '%';
+
+let score = 0;
+let gameOver = false;
+
+const scoreElement = document.getElementById('scoreBoard');
+
+document.body.addEventListener('keydown', function (event) {
+  switch (event.key) {
+    case 'ArrowLeft': moveLeft(); break;
+    case 'ArrowRight': moveRight(); break;
+  }
+});
+
+function moveLeft() {
+  if (currentPlayer > 0) {
+    currentPlayer--;
+    player.style.left = roads[currentPlayer].left + '%';
+  }
+}
+
+function moveRight() {
+  if (currentPlayer < 2) {
+    currentPlayer++;
+    player.style.left = roads[currentPlayer].left + '%';
+  }
+}
+
+function startGame() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('game').style.display = 'block';
+
+  setTimeout(() => dropObstacle('obs1', 0, 54), Math.random() * 2000);
+  setTimeout(() => dropObstacle('obs2', 1, 88), Math.random() * 3000);
+  setTimeout(() => dropObstacle('obs3', 2, 110), Math.random() * 4000);
+
+  const scoreInterval = setInterval(() => {
+    if (!gameOver) {
+      score++;
+      scoreElement.textContent = 'Score: ' + score;
+    }
+  }, 100);
+}
+
+function dropObstacle(obId, trackIndex, speed) {
+  const ob = document.getElementById(obId);
+  ob.style.top = '0px';
+  ob.style.display = 'block';
+
+  let top = 0;
+  const interval = setInterval(() => {
+    if (gameOver) {
+      clearInterval(interval);
+      return;
+    }
+
+    top += 10;
+    ob.style.top = top + 'px';
+
+    const playerRect = player.getBoundingClientRect();
+    const obRect = ob.getBoundingClientRect();
+
+    if (top >= window.innerHeight * 0.65 && trackIndex === currentPlayer) {
+      clearInterval(interval);
+      document.getElementById('gameOverOverlay').style.display = 'flex';
+      gameOver = true;
+    }
+
+    if (top > window.innerHeight) {
+      clearInterval(interval);
+      ob.style.display = 'none';
+
+      const delay = Math.random() * 2000 + 1000;
+      setTimeout(() => {
+        dropObstacle(obId, trackIndex, speed);
+      }, delay);
+    }
+  }, speed);
+}
+
+  </script>
+</body>
+
+</html>

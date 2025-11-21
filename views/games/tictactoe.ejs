@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" />
+  <script src="./script.js" defer></script>
+</head>
+<style>
+    body {
+background-color: rgb(20, 20, 20);
+   overflow: hidden;
+}
+
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar-wrapper {
+  width: 260px;
+  background: #111827; 
+  min-height: 100vh;
+}
+
+.main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-area .navbar {
+  position: relative;
+  width: 100%;
+  z-index: 10;
+}
+
+.page-content {
+  padding: 20px;
+}
+
+.box {
+  padding: 10px;
+}
+
+.card {
+  background-color: grey;
+  width: 190px;
+  height: 150px;
+  margin-bottom: 10px;
+}
+
+.red-box {
+  height: 100%;
+  min-height: 500px; 
+  width: 100%;
+}
+.text-center{
+  color: white;
+  font-size: 46px;
+}
+
+ #startScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+
+    #winner {
+  color: white;
+}
+
+    #startScreen h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px #000;
+    }
+
+    #startScreen button {
+      padding: 10px 20px;
+      font-size: 20px;
+      background: #ffcc00;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #startScreen button:hover {
+      background: #ffaa00;
+    }
+
+</style>
+
+<body>
+  
+        <%- include('../partials/navbar') %>
+   <div id="startScreen">
+    <div>
+      <h1>Tic Tac Toe</h1>
+      <button onclick="startGame()">Start Game</button>
+      <div id="button1">
+    </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-7">
+        <div class="row">
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a1" onclick="gameClick('a1')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a2" onclick="gameClick('a2')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a3" onclick="gameClick('a3')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a4" onclick="gameClick('a4')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a5" onclick="gameClick('a5')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a6" onclick="gameClick('a6')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a7" onclick="gameClick('a7')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a8" onclick="gameClick('a8')">
+            </div>
+          </div>
+          <div class="box">
+            <div class="card">
+              <img src="./image/whiteimage.png" class="img-fluid" id="a9" onclick="gameClick('a9')">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5 mt-5">
+        <div class="red-box">
+          <h1 class="text-center mt-5" id="who">
+            X
+          </h1>
+          <h1 class="text-center">TURN</h1>
+          <h1 id="winner"></h1>
+          <div class="text-center">
+            <button onclick="window.location.reload()" class="btn btn-success mt-3 p-3">Reset Game</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+    </div>
+  </div>
+<script>
+
+var currentplayer = 'x';
+var gameover = false;
+
+var v = {
+  x: 'image/x-o-icon_1076610-58542.avif',
+  o: 'image/small-o-icon-vector.jpg'
+};
+
+var counter = 0;
+ function startGame() {
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('button1').style.display = 'block';
+       document.getElementById('button3').style.display = 'block';
+ }
+function gameClick(imgid) {
+  if (gameover) return;
+
+  var img = document.getElementById(imgid);
+
+  if (img.src.includes(v.x) || img.src.includes(v.o)) return;
+
+  img.src = v[currentplayer];
+  img.style.width = '190px';
+  img.style.height = '150px';
+
+  counter++;
+
+  var winnerCombo = gameCheck();
+
+  if (winnerCombo) {
+    gameover = true;
+    document.getElementById('winner').innerText = currentplayer.toUpperCase() + " is the winner!";
+    highlightWinner(winnerCombo); 
+  } else if (counter === 9) {
+    gameover = true;
+    document.getElementById('winner').innerText = "Match Draw!"; 
+  } else {
+    currentplayer = counter % 2 === 0 ? 'x' : 'o';
+    document.getElementById('who').innerText = currentplayer.toUpperCase();
+  }
+}
+
+function gameCheck() {
+  var checks = [
+    ['a1', 'a2', 'a3'],
+    ['a4', 'a5', 'a6'],
+    ['a7', 'a8', 'a9'],
+    ['a1', 'a4', 'a7'],
+    ['a2', 'a5', 'a8'],
+    ['a3', 'a6', 'a9'],
+    ['a1', 'a5', 'a9'],
+    ['a3', 'a5', 'a7']
+  ];
+
+  for (let combo of checks) {
+    var [i1, i2, i3] = combo;
+    var src1 = document.getElementById(i1).src;
+    var src2 = document.getElementById(i2).src;
+    var src3 = document.getElementById(i3).src;
+
+    if (src1.includes(v.x) && src2.includes(v.x) && src3.includes(v.x)) {
+      return combo;
+    }
+    if (src1.includes(v.o) && src2.includes(v.o) && src3.includes(v.o)) {
+      return combo;
+    }
+  }
+
+  return null;
+}
+
+function highlightWinner(combo) {
+  combo.forEach(id => {
+    document.getElementById(id).style.border = "3px solid lime";
+    document.getElementById(id).style.borderRadius = "10px";
+  });
+}
+
+</script>
+</body>
+
+</html>
