@@ -13,6 +13,26 @@ body{
     box-sizing:border-box;
     border-bottom:1px solid rgba(255,255,255,0.08);
 }
+.back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #1f2937;
+    color: white;
+    margin-right: 15px;
+    font-size: 30px;
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+}
+
+.back-btn:hover {
+    background: #374151;
+    transform: scale(1.05);
+}
+
 
 .nav-left{
     display:flex;

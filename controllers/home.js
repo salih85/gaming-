@@ -15,6 +15,6 @@ exports.game3 = (req, res) => {
 }
 
 exports.game4 = (req, res) => {
-   return res.render('games/subwey'); 
+   return res.render('games/subway'); 
 }
 

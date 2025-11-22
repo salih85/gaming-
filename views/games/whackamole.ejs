@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Whack-a-Mole</title>
 
   <style>
@@ -21,7 +22,7 @@
 
     .sidebar-wrapper {
       width: 260px;
-      background: #111827; 
+      background: #111827;
       min-height: 100vh;
     }
 
@@ -53,29 +54,29 @@
       margin-top: 30px;
     }
 
-.hole {
-  width: 120px;
-  height: 120px;
-  background-color: #ddd;
-  border-radius: 10px;
-  position: relative;
- cursor: url("/image/hammer-cursor.png") 0 0, pointer;
-  transition: background 0.2s ease-in-out;
-}
+    .hole {
+      width: 120px;
+      height: 120px;
+      background-color: #ddd;
+      border-radius: 10px;
+      position: relative;
+      cursor: url("/image/hammer-cursor.png") 0 0, pointer;
+      transition: background 0.2s ease-in-out;
+    }
 
 
-.mole {
-  width: 80px;
-  height: 80px;
-  background-image: url("./image/whackmole.png");
-  background-size: cover;      
-  background-position: center;   
-  background-repeat: no-repeat;  
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: none;
-}
+    .mole {
+      width: 80px;
+      height: 80px;
+      background-image: url("./image/whackmole.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: none;
+    }
 
 
     .hole.active .mole {
@@ -101,7 +102,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       display: none;
       align-items: center;
       justify-content: center;
@@ -114,7 +115,7 @@
       border-radius: 10px;
       text-align: center;
       width: 300px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     #closeOverlay {
@@ -129,14 +130,14 @@
 
 <body>
 
-<div class="layout">
+  <div class="layout">
 
     <div class="sidebar-wrapper">
-       <%- include('../partials/sidebar'); %>
+      <%- include('../partials/sidebar'); %>
     </div>
 
     <div class="main-area">
-        <%- include('../partials/navbar'); %>
+      <%- include('../partials/navbar'); %>
 
         <div class="page-content">
 
@@ -174,69 +175,69 @@
         </div>
     </div>
 
-</div>
-
-
-<div id="gameOverOverlay">
-  <div id="gameOverBox">
-    <h2>Time's Up!</h2>
-    <p id="finalScoreText">Your Score: 0</p>
-    <button id="closeOverlay">Close</button>
   </div>
-</div>
 
 
-<script>
-  let score = 0;
-  let currentHole = null;
-  let gameInterval = null;
+  <div id="gameOverOverlay">
+    <div id="gameOverBox">
+      <h2>Time's Up!</h2>
+      <p id="finalScoreText">Your Score: 0</p>
+      <button id="closeOverlay">Close</button>
+    </div>
+  </div>
 
-  function randomHole() {
-    const holes = document.querySelectorAll('.hole');
-    holes.forEach(h => h.classList.remove('active'));
 
-    const index = Math.floor(Math.random() * holes.length);
-    currentHole = holes[index];
-    currentHole.classList.add('active');
-  }
+  <script>
+    let score = 0;
+    let currentHole = null;
+    let gameInterval = null;
 
-  function startGame() {
-    score = 0;
-    document.getElementById('score').innerText = "Score: 0";
-
-    if (gameInterval) clearInterval(gameInterval);
-    gameInterval = setInterval(randomHole, 1000);
-
-    setTimeout(() => {
-      clearInterval(gameInterval);
-
-      document.getElementById("finalScoreText").innerText =
-        "Your Score: " + score;
-
-      document.getElementById("gameOverOverlay").style.display = "flex";
-
+    function randomHole() {
       const holes = document.querySelectorAll('.hole');
       holes.forEach(h => h.classList.remove('active'));
 
-    }, 20000);
-  }
-
-  function whack(hole) {
-    if (hole.classList.contains('active')) {
-      score++;
-      document.getElementById('score').innerText = "Score: " + score;
-      hole.classList.remove('active');
+      const index = Math.floor(Math.random() * holes.length);
+      currentHole = holes[index];
+      currentHole.classList.add('active');
     }
-  }
 
-  document.getElementById('startBtn').addEventListener('click', startGame);
+    function startGame() {
+      score = 0;
+      document.getElementById('score').innerText = "Score: 0";
 
-  document.getElementById("closeOverlay").addEventListener("click", () => {
-    document.getElementById("gameOverOverlay").style.display = "none";
-  });
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(randomHole, 1000);
 
-</script>
+      setTimeout(() => {
+        clearInterval(gameInterval);
+
+        document.getElementById("finalScoreText").innerText =
+          "Your Score: " + score;
+
+        document.getElementById("gameOverOverlay").style.display = "flex";
+
+        const holes = document.querySelectorAll('.hole');
+        holes.forEach(h => h.classList.remove('active'));
+
+      }, 20000);
+    }
+
+    function whack(hole) {
+      if (hole.classList.contains('active')) {
+        score++;
+        document.getElementById('score').innerText = "Score: " + score;
+        hole.classList.remove('active');
+      }
+    }
+
+    document.getElementById('startBtn').addEventListener('click', startGame);
+
+    document.getElementById("closeOverlay").addEventListener("click", () => {
+      document.getElementById("gameOverOverlay").style.display = "none";
+    });
+
+  </script>
 
 </body>
-</html>
 
+</html>

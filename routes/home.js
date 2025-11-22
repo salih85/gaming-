@@ -20,7 +20,7 @@ const { home, game1,game2,game3,game4} = require('../controllers/home');
            .get(game3)
        
              router
-           .route('/subwey')
+           .route('/subway')
            .get(game4)
 
  module.exports = router;
